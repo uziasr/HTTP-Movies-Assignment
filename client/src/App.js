@@ -23,7 +23,7 @@ const App = () => {
           return <Movie {...props} addToSavedList={addToSavedList} />;
         }}
       />
-      <Route exact path='/update-movie/:id' component={UpdateMovie}/>
+      <Route exact path='/update-movie/:id' render={props =>{return <UpdateMovie {...props}/>}}/>
     </>
   );
 };

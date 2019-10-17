@@ -1,6 +1,22 @@
 import React, {useState} from 'react';
 import axios from 'axios'
+import styled from 'styled-components'
 
+const Div = styled.div`
+
+form{
+    display:flex;
+flex-direction:column;
+align-content: center;
+align-items: center;
+    input{
+        width:40%;
+        margin: 1% auto;
+        padding: 10px;
+        font-size: 24px;
+    }
+}
+`
 //rsc
 const UpdateMovie = (props) => {
     const [movie, updateMovie] = useState({
@@ -10,6 +26,7 @@ const UpdateMovie = (props) => {
         metascore: '',
         stars:[]
     })
+    
 
     const handleChanges = e =>{
         if (e.target.name==='stars'){
@@ -38,13 +55,18 @@ const UpdateMovie = (props) => {
         axios
       .put(`http://localhost:5000/api/movies/${id}`, movie)
       .then(res => {console.log(res)
-        this.setState({ movies: res.data })})
-      .catch(err => console.log(err.response));}
-    }
+        props.history.push('/')
+        // this.setState({ movies: res.data })
+    })
+      .catch(err => console.log(err.response));
+        console.log(props)
+}
+
+}
 
 
     return (
-        <div>
+        <Div>
             <form>
                 <input type='text' name='title' onChange={handleChanges}/>
                 <input type='text' name='director' onChange={handleChanges}/>
@@ -52,7 +74,7 @@ const UpdateMovie = (props) => {
                 <input type='array' name='stars' onChange={handleChanges}/>
                 <button onClick={updateChange}>Update!</button>
             </form>
-        </div>
+        </Div>
     );
 };
 

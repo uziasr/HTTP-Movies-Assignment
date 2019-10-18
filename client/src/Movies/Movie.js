@@ -20,16 +20,40 @@ export default class Movie extends React.Component {
   }
 
   fetchMovie = id => {
+    console.log('helleo',this.props)
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => this.setState({ movie: res.data }))
+      .then(res => {
+        this.setState({ movie: res.data })
+        this.props.setMovies(res.data)
+    })
       .catch(err => console.log(err.response));
   };
+
+  deleteMovie = () =>{
+    const id = (this.props.match.params.id)
+    console.log(id)
+    axios
+    .delete(`http://localhost:5000/api/movies/${id}`)
+    .then(res=>{
+      console.log(res)
+      // this.setState({
+      //   movie:[...this.state.movie,res]
+      // })
+      this.props.history.push('/')
+    })
+    .catch(err=>console.log(err))
+  }
 
   saveMovie = () => {
     const addToSavedList = this.props.addToSavedList;
     addToSavedList(this.state.movie);
   };
+
+  editMovie = () =>{
+    const id = (this.props.match.params.id)
+    this.props.history.push(`/update-movie/${id}`)
+  }
 
   render() {
     if (!this.state.movie) {
@@ -42,6 +66,8 @@ export default class Movie extends React.Component {
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
+        <button onClick={this.editMovie}>Edit</button>
+        <button onClick={this.deleteMovie}>Delete</button>
       </div>
     );
   }

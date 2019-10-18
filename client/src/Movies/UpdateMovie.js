@@ -19,6 +19,7 @@ align-items: center;
 `
 //rsc
 const UpdateMovie = (props) => {
+    console.log('whats in here', props)
     const [movie, updateMovie] = useState({
         id:props.match.params.id,
         title:'',
@@ -29,11 +30,12 @@ const UpdateMovie = (props) => {
     
 
     const handleChanges = e =>{
+        console.log(props)
         if (e.target.name==='stars'){
             console.log('stars!!')
             updateMovie({
                 ...movie,
-                stars:[...movie.stars,(e.target.value)]
+                stars:([...movie.stars,(e.target.value)])
             }) 
         }
         updateMovie({
@@ -42,36 +44,35 @@ const UpdateMovie = (props) => {
         })
     }
     console.log(movie)
-    const updateChange = (e) =>
-    {
-        updateMovie({
+    const updateChange = (e) =>{
+        const stars = Array.isArray(movie.stars) ? movie.stars: movie.stars.split(' ')
+        // console.log(stars)
+        const updatedMovie = {
             ...movie,
-            stars:[movie.stars]
-        })
-        console.log(movie)
+            stars:stars
+        }
         e.preventDefault()
-        if (movie.stars.length===1){
+        console.log(Array.isArray(stars))
         const id = props.match.params.id
+        console.log('helelel')
         axios
-      .put(`http://localhost:5000/api/movies/${id}`, movie)
+      .put(`http://localhost:5000/api/movies/${id}`, updatedMovie)
       .then(res => {console.log(res)
         props.history.push('/')
         // this.setState({ movies: res.data })
     })
       .catch(err => console.log(err.response));
         console.log(props)
-}
 
 }
-
 
     return (
         <Div>
             <form>
-                <input type='text' name='title' onChange={handleChanges}/>
-                <input type='text' name='director' onChange={handleChanges}/>
-                <input type='text' name='metascore' onChange={handleChanges}/>
-                <input type='array' name='stars' onChange={handleChanges}/>
+                <input type='text' name='title' onChange={handleChanges} placeholder={props.movies ? props.movies.title:'title'}/>
+                <input type='text' name='director' onChange={handleChanges} placeholder={props.movies?props.movies.director:'director'}/>
+                <input type='text' name='metascore' onChange={handleChanges} placeholder={props.movies?props.movies.metascore:'metascore'}/>
+                <input type='array' name='stars' onChange={handleChanges} placeholder={props.movies? props.movies.stars: 'stars' }/>
                 <button onClick={updateChange}>Update!</button>
             </form>
         </Div>

@@ -20,9 +20,13 @@ export default class Movie extends React.Component {
   }
 
   fetchMovie = id => {
+    console.log('helleo',this.props)
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => this.setState({ movie: res.data }))
+      .then(res => {
+        this.setState({ movie: res.data })
+        this.props.setMovies(res.data)
+    })
       .catch(err => console.log(err.response));
   };
 
